@@ -49,11 +49,13 @@ class TransactionController extends BaseController
         $accounts         = FFForm::makeSelectList($this->_helper->getAssetAccounts());
         $budgets          = FFForm::makeSelectList($this->_helper->getBudgets());
         $budgets[0]       = '(no budget)';
+        
         $piggyBanks       = $this->_helper->getPiggyBanks();
         $repeatedExpenses = $this->_helper->getRepeatedExpenses();
         $list             = $piggyBanks->merge($repeatedExpenses);
         $piggies          = FFForm::makeSelectList($list);
         $piggies[0]       = '(no piggy bank)';
+        
         $preFilled        = Session::has('preFilled') ? Session::get('preFilled') : [];
         $respondTo        = ['account_id', 'account_from_id'];
         $subTitle         = 'Add a new ' . e($what);
@@ -127,7 +129,12 @@ class TransactionController extends BaseController
         $subTitle     = 'Edit ' . e($what) . ' "' . e($journal->description) . '"';
         $budgets      = FFForm::makeSelectList($this->_helper->getBudgets(), true);
         $accounts     = FFForm::makeSelectList($this->_helper->getAssetAccounts());
-        $piggies      = FFForm::makeSelectList($this->_helper->getPiggyBanks(), true);
+        
+        $piggyBanks       = $this->_helper->getPiggyBanks();
+        $repeatedExpenses = $this->_helper->getRepeatedExpenses();
+        $list             = $piggyBanks->merge($repeatedExpenses);
+        $piggies          = FFForm::makeSelectList($list, true);
+        
         $transactions = $journal->transactions()->orderBy('amount', 'DESC')->get();
         $preFilled    = [
             'date'          => $journal->date->format('Y-m-d'),
